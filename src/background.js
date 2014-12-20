@@ -1,26 +1,45 @@
 
 chrome.webRequest.onBeforeRequest.addListener(function(details) {
+        var returner = false;
         var scheme = /^https/.test(details.url) ? 'https' : 'http';
         var blocked_url = chrome.extension.getURL("blocked.html");
-        console.log( betty_blocker.get_twitter_user_(details.url));
-        // return {redirectUrl: blocked_url};
-	}, {
-        urls: ['*://twitter.com/*'] // Example: Block all requests to YouTube
+        var user_name = betty_blocker.get_twitter_user_(details.url);
+        if(user_name !== false) {
+	        var user_list = betty_blocker.load_users();
+        	if(user_list.indexOf(user_name) > -1 ) {
+        		returner = {redirectUrl: blocked_url};
+        	}
+        }
+        if(returner) return returner;
+  	}, {
+        urls: ['*://twitter.com/*']
 	}, ['blocking']);
 
-var user_list = [];
 
 var betty_blocker = {
 	
-  	block_user: function() {
-		chrome.tabs.query({ currentWindow: true, active: true }, this.block_user_(tabs) );
+   	block_user: function() {
+		chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
+			if(typeof tabs !== 'undefined' && typeof tabs[0] !== 'undefined') {
+				var user_name = betty_blocker.get_twitter_user_(tabs[0].url);
+				var user_list = betty_blocker.load_users();
+				user_list.push(user_name);
+				betty_blocker.save_users(user_list);
+				console.log(user_name);
+				console.log(user_list);
+			}
+		});
 	},
 
-	block_user_: function(tabs) {
-		if(typeof tabs[0] !== 'undefined') {
-			var user_name = this.get_twitter_user_(tabs[0].url);
-			console.log(user_name);
-		}
+	save_users: function(user_list) {
+		var names = [];
+		localStorage["betty_blocker_user_list"] = JSON.stringify(user_list);
+	},
+
+	load_users: function() {
+		user_list = JSON.parse(localStorage["betty_blocker_user_list"] || null);
+		if(user_list == null) user_list = [];
+		return user_list;
 	},
 
 	get_twitter_user_: function(url) {
