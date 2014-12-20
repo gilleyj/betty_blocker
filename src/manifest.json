@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Navigation Intercepter",
-  "description": "This extension helps betty be a better person.",
+  "name": "Betty Blocker",
+  "description": "This extension helps Betty be a better person.",
   "version": "1.0",
 
   "background": {
@@ -15,6 +15,7 @@
   },
 
   "permissions": [
+    "tabs",
     "webRequest", 
     "webRequestBlocking",
     "<all_urls>"
