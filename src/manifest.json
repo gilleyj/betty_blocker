@@ -5,6 +5,10 @@
   "description": "This extension helps Betty be a better person.",
   "version": "1.0",
 
+  "web_accessible_resources": [
+    "blocked.html"
+  ],
+
   "background": {
     "scripts": ["background.js"]
   },
@@ -13,6 +17,7 @@
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
+
 
   "permissions": [
     "tabs",

@@ -1,16 +1,13 @@
 
 chrome.webRequest.onBeforeRequest.addListener(function(details) {
-        var returner = false;
-        var scheme = /^https/.test(details.url) ? 'https' : 'http';
-        var blocked_url = chrome.extension.getURL("blocked.html");
         var user_name = betty_blocker.get_twitter_user_(details.url);
+        console.log(chrome.extension.getURL("blocked.html"));
         if(user_name !== false) {
 	        var user_list = betty_blocker.load_users();
         	if(user_list.indexOf(user_name) > -1 ) {
-        		returner = {redirectUrl: blocked_url};
+        		return {redirectUrl: chrome.extension.getURL("blocked.html") + "?user=" + user_name};
         	}
         }
-        if(returner) return returner;
   	}, {
         urls: ['*://twitter.com/*']
 	}, ['blocking']);
