@@ -1,24 +1,27 @@
 {
+  // Descriptive metadata
   "manifest_version": 2,
-
   "name": "Betty Blocker",
   "description": "This extension helps Betty be a better person.",
   "version": "1.0",
 
-  "web_accessible_resources": [
-    "blocked.html"
-  ],
-
+  // the core file for this extension
   "background": {
     "scripts": ["background.js"]
   },
 
+  // the toolbar interface component of this extension
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
 
+  // a list of internal resources that will be accessed by this extension
+  "web_accessible_resources": [
+    "blocked.html"
+  ],
 
+  // what permissions this extension requires to run
   "permissions": [
     "tabs",
     "webRequest", 
